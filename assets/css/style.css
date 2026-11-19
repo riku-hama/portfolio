@@ -1,0 +1,683 @@
+/* ポートフォリオ 共通スタイル
+   方針：作品が主役。白地に黒に近い文字。色は作品の動画に任せる */
+
+:root {
+  --paper: #ffffff;
+  --ink: #222222;
+  --sub: #5c5c5c;
+  --rule: #d6d6d6;
+  /* 差し色はこの1色だけ。冬の夜から朝の色に合わせた深い藍 */
+  --accent: #1d4e6e;
+  --focus: var(--accent);
+  --todo-ink: #a1001f;
+  --todo-bg: #fdeced;
+  --night: #2e2e2e;
+  --dawn: #8f8f8f;
+  --day: #e6e6e6;
+  --measure: 38em;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", YuGothic, Meiryo, "Noto Sans CJK JP", "Noto Sans JP", sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.85;
+  letter-spacing: 0.03em;
+  /* 日本語は、HTMLに入れた <wbr>（文節の区切り）でだけ折り返す。
+     「調|整」「で|す」のように語の途中で切れるのを防ぐ。
+     <wbr> は _private/add_wbr.py が入れる */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 文節で自動で折り返せるブラウザ（Chrome・Edgeなど）では、そちらに任せる */
+@supports (word-break: auto-phrase) {
+  body {
+    word-break: auto-phrase;
+  }
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.28em;
+}
+
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px 96px;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.45;
+  font-weight: 700;
+  word-break: auto-phrase;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.625rem;
+}
+
+/* 節の区切り。横いっぱいの細い藍の線で、飾りを足さずに区切りを見せる */
+h2 {
+  margin: 4rem 0 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--accent);
+  font-size: 1.375rem;
+}
+
+h3 {
+  margin: 2.25rem 0 0.5rem;
+  font-size: 1.0625rem;
+}
+
+p,
+ul {
+  max-width: var(--measure);
+  margin: 0 0 1rem;
+}
+
+/* 最後の行に1〜2文字だけ残らないようにする */
+p,
+li {
+  text-wrap: pretty;
+}
+
+ul {
+  padding-left: 1.25em;
+}
+
+li + li {
+  margin-top: 0.25rem;
+}
+
+.small {
+  font-size: 0.8125rem;
+  color: var(--sub);
+}
+
+/* 1行で見せたい長めの文。画面幅が足りないとき（スマホなど）は折り返す */
+.wide {
+  max-width: none;
+}
+
+/* 製品名など、途中で折り返したくない語 */
+.keep {
+  white-space: nowrap;
+}
+
+/* 未決の箇所。埋めたら消える */
+.todo {
+  color: var(--todo-ink);
+  background: var(--todo-bg);
+  padding: 0 0.2em;
+}
+
+/* ---------- トップ ---------- */
+
+.intro {
+  margin-bottom: 3rem;
+}
+
+/* 名前を大きくし、下の灰色の線で一言と分けて、最初の画面にまとまりを出す */
+.intro h1 {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--rule);
+  font-size: 1.875rem;
+  letter-spacing: 0.06em;
+}
+
+@media (min-width: 760px) {
+  .intro h1 {
+    font-size: 2.25rem;
+  }
+}
+
+.intro .lead {
+  margin: 1.5rem 0 0.5rem;
+  font-size: 1.3125rem;
+  line-height: 1.6;
+  font-weight: 700;
+  word-break: auto-phrase;
+}
+
+.works {
+  display: grid;
+  gap: 2.5rem 2rem;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.works > li + li {
+  margin-top: 0;
+}
+
+.works img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--day);
+  /* ホバーの縁は画像の内側に描き、周りの並びをずらさない */
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: filter 0.2s, outline-color 0.2s;
+}
+
+/* 画像とタイトルのどちらに乗せても、同じ作品が反応する。
+   制作中（.wip）の作品はリンクが無いので反応させない */
+.works li:not(.wip):hover img {
+  filter: brightness(1.06);
+  outline-color: var(--accent);
+}
+
+.works li:hover h3 a {
+  text-decoration-thickness: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .works img {
+    transition: none;
+  }
+}
+
+.works h3 {
+  margin: 0.875rem 0 0.25rem;
+}
+
+.works p {
+  margin: 0;
+}
+
+.works .wip .small {
+  margin-top: 0.25rem;
+}
+
+.works + .small {
+  margin-top: 1.5rem;
+}
+
+/* プロフィール。PCでは左に写真、右に文章。スマホでは写真を上にして縦に並べる */
+.profile-body {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.profile-body p {
+  margin: 0;
+}
+
+.profile-body img {
+  width: 100%;
+  max-width: 28rem;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: var(--day);
+}
+
+@media (min-width: 760px) {
+  .profile-body {
+    grid-template-columns: 20rem minmax(0, 1fr);
+    align-items: start;
+    gap: 2rem;
+  }
+}
+
+/* 編集実績。「・」の項目名、動画リンク、画像の順に縦に並べる */
+.sample {
+  margin: 0;
+  padding-left: 1.25em;
+  list-style-type: "・";
+}
+
+.sample p {
+  margin: 0;
+}
+
+.sample > li + li {
+  margin-top: 1.75rem;
+}
+
+.sample .sample-title {
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+}
+
+/* 項目名のすぐ下に添える注記 */
+.sample .small {
+  margin-top: -0.5rem;
+}
+
+.sample img {
+  width: 100%;
+  max-width: 28rem;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--day);
+  outline: 1px solid transparent;
+  outline-offset: -1px;
+  transition: filter 0.2s, outline-color 0.2s;
+}
+
+.sample a:hover img {
+  filter: brightness(1.06);
+  outline-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sample img {
+    transition: none;
+  }
+}
+
+/* 経歴。項目ごとに灰色の線で区切り、PCでは左に項目名、右に本文を置く */
+.career-item {
+  padding: 1.25rem 0 0.25rem;
+  border-top: 1px solid var(--rule);
+}
+
+/* 見出しの藍の線のすぐ下に灰色の線が重ならないように */
+.career h2 + .career-item {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.career-item h3 {
+  margin: 0;
+}
+
+/* 職種の下に、働き方と期間を小さく添える */
+.career-item .period {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  color: var(--sub);
+}
+
+@media (min-width: 760px) {
+  .career-item {
+    display: grid;
+    grid-template-columns: 13em minmax(0, 1fr);
+    column-gap: 2rem;
+  }
+
+  .career-item .period {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 760px) {
+  .works {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---------- 作品ページ ---------- */
+
+.back {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--sub);
+}
+
+.film {
+  margin: 1.5rem 0 0.5rem;
+}
+
+.film video {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.film + .small {
+  margin-bottom: 2rem;
+}
+
+/* 15秒の割り振り。幅は秒数に比例 */
+.timeline {
+  margin: 1.5rem 0 1.75rem;
+}
+
+.timeline ol {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  margin: 0;
+  padding: 0.5rem 0.5rem 0.4rem;
+  min-height: 3.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  background: var(--day);
+}
+
+.timeline li.night {
+  background: var(--night);
+  color: #fff;
+}
+
+.timeline li.dawn {
+  background: var(--dawn);
+  color: #fff;
+}
+
+.timeline li.white {
+  background: var(--paper);
+  outline: 1px solid var(--rule);
+  outline-offset: -1px;
+}
+
+.timeline .no {
+  display: block;
+  font-weight: 700;
+}
+
+.timeline .ends {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--sub);
+}
+
+@media (max-width: 599px) {
+  .timeline .sec {
+    display: none;
+  }
+}
+
+/* 表 */
+.table {
+  width: 100%;
+  margin: 0 0 1.5rem;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.75;
+}
+
+.table th,
+.table td {
+  padding: 0.625rem 1rem 0.625rem 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table thead th {
+  padding-top: 0;
+  font-size: 0.8125rem;
+  color: var(--sub);
+  border-bottom-color: var(--ink);
+}
+
+.table tbody th {
+  width: 8.5em;
+  font-weight: 700;
+}
+
+.table td.nowrap {
+  white-space: nowrap;
+}
+
+/* 表が続くとき（制作の工程と、本数・作業時間）は、行と行の間隔と同じにする */
+.table + .table {
+  margin-top: -1.5rem;
+}
+
+/* スマホでは、列の多い表を行ごとに縦に積む */
+@media (max-width: 639px) {
+  .table tbody th {
+    width: 6.5em;
+  }
+
+  .stack thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .stack tr {
+    display: block;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .stack td {
+    display: block;
+    padding: 0;
+    border: 0;
+  }
+
+  .stack td.key {
+    display: inline;
+    font-weight: 700;
+    margin-right: 0.75em;
+  }
+
+  .stack td.key + td.key {
+    margin-right: 0;
+  }
+
+  .stack td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-top: 0.375rem;
+    font-size: 0.75rem;
+    color: var(--sub);
+  }
+}
+
+/* 表の1列目（カット番号・工程名）と見出しは折り返さない */
+.stack thead th,
+.stack td.key {
+  white-space: nowrap;
+}
+
+/* ---------- 色（2026-11-19 追加） ----------
+   style.css のいちばん最後に貼る。
+   方針：白地のまま、作品ごとに「その作品の色」を1色持たせる。
+   ・夜と朝：冬の夜から朝の藍（今の差し色のまま）
+   ・牛乳プリン：カラメルの茶
+   トップは藍を基本にし、作品の一覧だけ各作品の色を使う。
+   グラデーションと影は使わない（今の方針のまま）。 */
+
+:root {
+  --tint: #eef4f8; /* 差し色をごく薄くした面の色 */
+}
+
+/* 作品ごとの色。作品ページは <body class="theme-snow">、
+   トップの作品一覧は <li class="theme-snow"> のように付ける */
+.theme-snow {
+  --accent: #1d4e6e;
+  --tint: #eef4f8;
+  --night: #1f2d45;
+  --dawn: #4f7193;
+  --day: #dde7ef;
+}
+
+.theme-pudding {
+  --accent: #8a5523;
+  --tint: #faf3e6;
+  --night: #6b4326; /* 夕飯のあとの食卓の、電球色の明かり */
+  --dawn: #8a6a45;
+  --day: #e4ecd5;   /* 朝の牧場 */
+}
+
+/* 横にはみ出さないように（下の帯を画面の端まで広げるため） */
+body {
+  overflow-x: clip;
+}
+
+/* ---------- 見出し ---------- */
+
+/* 節の見出し：灰色の線の左端に、差し色の短い太線 */
+h2 {
+  position: relative;
+  border-bottom: 1px solid var(--rule);
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 3em;
+  height: 3px;
+  background: var(--accent);
+}
+
+/* 作品ページの題名の上に、作品の色の短い帯 */
+.back + h1::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 4px;
+  margin-bottom: 0.875rem;
+  background: var(--accent);
+}
+
+/* 箇条書きの点を差し色に */
+ul li::marker {
+  color: var(--accent);
+}
+
+/* ---------- トップ ---------- */
+
+/* 名前の部分を、画面の端までの薄い色の帯にする */
+.intro {
+  margin: -40px calc(50% - 50vw) 3rem;
+  padding: 3rem calc(50vw - 50%) 2.25rem;
+  background: var(--tint);
+}
+
+.intro h1 {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.intro h1::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  height: 4px;
+  margin-top: 1rem;
+  background: var(--accent);
+}
+
+/* 作品の一覧：画像の上に、作品の色の帯 */
+.works > li {
+  border-top: 4px solid var(--accent);
+}
+
+.works h3 a {
+  color: var(--ink);
+}
+
+.sample li::marker {
+  color: var(--accent);
+}
+
+/* ---------- 作品ページ ---------- */
+
+/* 「トップへ戻る」を小さな札に */
+.back {
+  padding: 0.125rem 0.875rem;
+  border-radius: 999px;
+  background: var(--tint);
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+}
+
+/* 2つ目の「トップへ戻る」は上に余白 */
+section + .back {
+  margin-top: 3rem;
+}
+
+/* 概要など、項目と中身の表：薄い色の面にのせる */
+.table:not(.stack) {
+  background: var(--tint);
+}
+
+.table:not(.stack) th,
+.table:not(.stack) td {
+  border-bottom-color: var(--paper);
+}
+
+.table:not(.stack) th {
+  padding-left: 1.25rem;
+  color: var(--accent);
+}
+
+/* 左の余白を足した分、項目名の列を広げる（「生成した映像」が折り返さないように） */
+.table:not(.stack) tbody th {
+  width: calc(8.5em + 1.25rem);
+}
+
+@media (max-width: 639px) {
+  .table:not(.stack) tbody th {
+    width: calc(6.5em + 1.25rem);
+  }
+}
+
+/* 表が続くとき（本数・作業時間）は、面をつなげる */
+.table:not(.stack) + .table:not(.stack) {
+  margin-top: -1.5rem;
+}
+
+/* 構成表・工程表：見出しの線とカット番号を差し色に */
+.stack thead th {
+  border-bottom: 2px solid var(--accent);
+}
+
+.stack td.key:first-child {
+  color: var(--accent);
+}
